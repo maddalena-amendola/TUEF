@@ -129,7 +129,7 @@ def split_train_test(data_dir, questions_df, answers_df, users):
     uid_ask = dict(Counter(questions_df.OwnerUserId))
     uid_acc = dict(Counter(questions_df.AcceptedAnswerer))
     
-    test = questions_df[[uid_ask.get(uid, 0) >=3 and uid_acc.get(acc, 0) >=  for uid, acc in zip(questions_df['OwnerUserId'], questions_df['AcceptedAnswerer'])]]
+    test = questions_df[[uid_ask.get(uid, 0) >=3 and uid_acc.get(acc, 0) >= 3 for uid, acc in zip(questions_df['OwnerUserId'], questions_df['AcceptedAnswerer'])]]
     train = questions_df[~questions_df['Id'].isin(test.Id)]
     
     a_train = answers_df[answers_df['ParentId'].isin(train.Id)]
@@ -150,6 +150,8 @@ def split_train_test(data_dir, questions_df, answers_df, users):
     u_train['Expert'] = u_train.Id.apply(lambda x: 1 if x in exps else 0)
     u_train = compute_users_features(data_dir, u_train, a_train)
     test = test[test['AcceptedAnswerer'].isin(u_train.Expert)]
+    test_size = int(len(questions_df)*0.1)
+    test = test[-test_size:]
     test.index = range(len(test))
     
     train = questions_df[~questions_df['Id'].isin(test.Id)]
@@ -168,9 +170,7 @@ def split_train_test(data_dir, questions_df, answers_df, users):
     
     train.to_csv(data_dir + 'train.csv.gz', compression='gzip', index=False)
     test.to_csv(data_dir + 'test.csv.gz', compression='gzip', index=False)
-    a_train.to_csv(data_dir + 'answers_train.csv.gz', compression='gzip', index=False)
-    a_test.to_csv(data_dir + 'answers_test.csv.gz', compression='gzip', index=False)
-    u_train.to_csv(data_dir + 'users.csv.gz', compression='gzip', index=False)
+    u_train.to_csv(data_dir + 'experts.csv.gz', compression='gzip', index=False)
     
     return
 

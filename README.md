@@ -30,7 +30,7 @@ To run TUEF correctly, it is necessary to create a conda environment that instal
 To create and activate the environment, run the following commands:
 
 ```
-$ conda env create -f environment.yml python=3.8
+$ conda env create -f environment.yml
 $ conda activate tuef
 $ pip install -r requirements.txt
 ```
