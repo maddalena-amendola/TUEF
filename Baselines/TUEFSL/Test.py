@@ -62,7 +62,7 @@ def evaluate(data_dir, struc_dir, n_samples, threshold, restart, n_steps):
     ground_truth = [str(int(exp)) for exp in test_df.AcceptedAnswerer]
     
     ground_truth = list(zip(test_df.Id, test_df.AcceptedAnswerer))
-    results = evaluate_pred(prediction_df, ground_truth, ["precision@1", "ndcg@3", "recall@10", "recall@100", 'mrr'])
+    results = evaluate_pred(prediction_df, ground_truth, ["precision@1", "ndcg@3", "recall@10", "recall@100", 'mrr'], struc_dir)
     
     table = [list(results.keys()), list(results.values())]
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))

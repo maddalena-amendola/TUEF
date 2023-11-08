@@ -49,7 +49,7 @@ ___
 
 ### Run
 
-For both `TUEF` and `Baselines`, we made available the measures results and the rankers. For dimension problems, we can't upload all the data. 
+For both `TUEF` and `Baselines`, we made available the runs. For dimension problems, we can't upload all the data. 
 To fully reproduce the study and execute `TUEF` from scratch, run the following command:
 
 ```
@@ -62,9 +62,11 @@ The `Baselines` can be computed after `TUEF` with the following command:
 $ bash Baselines.sh
 ```
 
-The `NerankBaseline` contains the adaptation of `TUEF` to the `Nerank` configuration problem. Given the smaller dimension of data, we made available the complete execution. 
+The `NerankBaseline` contains the adaptation of `TUEF` to the `Nerank` configuration problem. 
 To execute `NerankBaseline` from scratch, run the following command in the NerankBaseline folder:
 
 ```
 $ bash NerankBaseline.sh
 ```
+
+The `T-Test.ipynb` notebook shows results of the paired t-test with `p-value<0.05`.

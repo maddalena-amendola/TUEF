@@ -170,6 +170,7 @@ def evaluate(data_dir, struc_dir, baseline_dir, n_samples):
     data = extract_features(data, graphs, names_id)
     data = join_layer_experts(data, test_df, exp_df, exp_layer_ans)    
     pickle.dump(data, open(baseline_dir + 'test_data', 'wb'))
+    
     dfs = pd.concat(data, ignore_index=True)
 
     # Keeping only the features on which we would validate our model
@@ -185,11 +186,11 @@ def evaluate(data_dir, struc_dir, baseline_dir, n_samples):
     ground_truth = [str(int(exp)) for exp in test_df.AcceptedAnswerer]
     
     ground_truth = list(zip(test_df.Id, test_df.AcceptedAnswerer))
-    results = evaluate_pred(prediction_df, ground_truth, ["precision@1", "ndcg@3", "recall@10", "recall@100", 'mrr'])
+    results = evaluate_pred(prediction_df, ground_truth, ["precision@1", "ndcg@3", "recall@10", "recall@100", 'mrr'], baseline_dir)
     
     table = [list(results.keys()), list(results.values())]
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
-    
+        
     write_json(results, baseline_dir + 'measures')
     
 def TUEFCB(data_name, label, ltr_size, max_evals, test_size):

@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import os
 from lxml import etree
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 from Utils import parse_arguments
 import warnings
 warnings.simplefilter(action='ignore', category=Warning)
@@ -104,17 +104,44 @@ def select_data(raw_dir, data_dir):
     print('Number of questions:', len(questions_df))
     print('Number of answers:', len(answers_df))
     print('Number of users:', len(users_df))
-    
+    '''
     questions_df.to_csv(data_dir + 'questions.csv.gz', compression='gzip', index=False)
     answers_df.to_csv(data_dir + 'answers.csv.gz', compression='gzip', index=False)
     users_df.to_csv(data_dir + 'users.csv.gz', compression='gzip', index=False)
+    '''
+    return questions_df, answers_df, users_df
+
+def split_train_test(data_dir, questions_df, answers_df, users):
     
-    return 
+    uid_ask = dict(Counter(questions_df.OwnerUserId))
+    uid_acc = dict(Counter(questions_df.AcceptedAnswerer))
+    
+    test = questions_df[[uid_ask.get(uid, 0) >=3 and uid_acc.get(acc, 0) >= 3 for uid, acc in zip(questions_df['OwnerUserId'], questions_df['AcceptedAnswerer'])]]
+    train = questions_df[~questions_df['Id'].isin(test.Id)]
+    
+    a_train = answers_df[answers_df['ParentId'].isin(train.Id)]
+    a_train.index = range(len(a_train))
+    
+    uids = set.union(set(train.OwnerUserId.values), set(a_train.OwnerUserId.values))
+    u_train = users[users['Id'].isin(uids)]
+    u_train.index = range(len(u_train))
+    
+    a_test = answers_df[answers_df['ParentId'].isin(test.Id)]
+    a_test.index = range(len(a_test)) 
+    
+    train.to_csv(data_dir + 'train.csv.gz', compression='gzip', index=False)
+    test.to_csv(data_dir + 'test.csv.gz', compression='gzip', index=False)
+    a_train.to_csv(data_dir + 'answers_train.csv.gz', compression='gzip', index=False)
+    a_test.to_csv(data_dir + 'answers_test.csv.gz', compression='gzip', index=False)
+    u_train.to_csv(data_dir + 'users.csv.gz', compression='gzip', index=False)
+    
 
 def process_data(raw_dir, data_dir):
       
     print('Processing the questions')   
-    select_data(raw_dir, data_dir)
+    questions_df, answers_df, users = select_data(raw_dir, data_dir)
+    print('Splitting train and test')
+    split_train_test(data_dir, questions_df, answers_df, users)
 
 if __name__ == "__main__":
     

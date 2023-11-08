@@ -186,7 +186,7 @@ def join_layer_experts(data, l2r_df, exp_df, exp_layer_ans, hit = False):
             
     return dfs
 
-def evaluate_pred(predictions, ground_truth, metrics):
+def evaluate_pred(predictions, ground_truth, metrics, baseline_dir = False):
     
     run_dict = defaultdict(dict)
     for qid, exp, s in zip(predictions.qid, predictions.Expert, predictions.score):
@@ -199,6 +199,9 @@ def evaluate_pred(predictions, ground_truth, metrics):
     qrels = Qrels(qrels_dict)
     run = Run(run_dict)
     
+    if baseline_dir:
+        write_json(run_dict, baseline_dir + 'run_dict')
+        
     return evaluate(qrels, run, metrics)
 
 def parse_arguments():

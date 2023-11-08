@@ -45,7 +45,4 @@ if __name__ == "__main__":
         process_data(raw_dir, data_dir)
         build_MLG(data_dir, struc_dir, min_k, max_k, n_features, min_accepted_answers)
     
-    if os.path.exists(struc_dir + 'ranker.txt'):
-        print('Learning to Rank model already trained!')
-    else: 
-        learning_to_rank(data_dir, struc_dir, ltr_samples, test_samples, threshold, restart, n_steps, max_evals)
+    learning_to_rank(data_dir, struc_dir, ltr_samples, test_samples, threshold, restart, n_steps, max_evals)

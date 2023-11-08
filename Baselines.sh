@@ -16,25 +16,25 @@ STEPS=10
 MAXEVALS=300
 TESTSIZE=5000
 
-$PY Baselines2/TUEFCB/TUEFCB.py --dataset $DATASET \
+$PY Baselines/TUEFCB/TUEFCB.py --dataset $DATASET \
                 --label $LABEL \
                 --ltrsize $LTRSIZE \
                 --maxevals $MAXEVALS \
                 --testsize $TESTSIZE 
 
-$PY Baselines2/TUEFNB/TUEFNB.py --dataset $DATASET \
+$PY Baselines/TUEFNB/TUEFNB.py --dataset $DATASET \
                 --label $LABEL \
                 --ltrsize $LTRSIZE \
                 --maxevals $MAXEVALS \
                 --testsize $TESTSIZE 
 
-$PY Baselines2/TUEFNORW/TUEFNORW.py --dataset $DATASET \
+$PY Baselines/TUEFNORW/TUEFNORW.py --dataset $DATASET \
                 --label $LABEL \
                 --ltrsize $LTRSIZE \
                 --maxevals $MAXEVALS \
                 --testsize $TESTSIZE 
 
-$PY Baselines2/TUEFSL/TUEFSL.py --dataset $DATASET \
+$PY Baselines/TUEFSL/TUEFSL.py --dataset $DATASET \
                 --label $LABEL \
                 --startdate $STARTDATE \
                 --enddate $ENDDATE \
@@ -47,14 +47,14 @@ $PY Baselines2/TUEFSL/TUEFSL.py --dataset $DATASET \
                 --maxevals $MAXEVALS \
                 --testsize $TESTSIZE 
 
-$PY Baselines2/BC/BC.py --dataset $DATASET \
+$PY Baselines/BC/BC.py --dataset $DATASET \
                 --label $LABEL \
                 --testsize $TESTSIZE 
 
-$PY Baselines2/BM25/BM25.py --dataset $DATASET \
+$PY Baselines/BM25/BM25.py --dataset $DATASET \
                 --label $LABEL \
                 --testsize $TESTSIZE 
 
-$PY Baselines2/TUEFLIN/TUEFLIN.py --dataset $DATASET \
+$PY Baselines/TUEFLIN/TUEFLIN.py --dataset $DATASET \
                 --label $LABEL \
                 --testsize $TESTSIZE 

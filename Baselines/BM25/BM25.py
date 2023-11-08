@@ -181,8 +181,8 @@ def BM25(data_name, label, n_samples):
         experts = reduce(lambda lu,i:i[0] in dict(lu).keys() and lu or lu+[i], sorted_sim, [])      
         experts = [(str(int(e[0])), 100-i) for i,e in enumerate(experts[:100])]
         
-        run_dict[qid] = dict(experts)
-        qrels_dict[qid][str(int(acc))] = 1
+        run_dict[int(qid)] = dict(experts)
+        qrels_dict[int(qid)][str(int(acc))] = 1
 
     qrels = Qrels(qrels_dict)
     run = Run(run_dict)
@@ -191,7 +191,7 @@ def BM25(data_name, label, n_samples):
     table = [list(results.keys()), list(results.values())]
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
-    write_json(results, baseline_dir + 'measures')
+    write_json(run_dict, baseline_dir + 'run_dict')
     
     return
 

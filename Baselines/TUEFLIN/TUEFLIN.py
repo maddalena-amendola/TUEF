@@ -28,7 +28,8 @@ def get_AACT(df, u, tags, pt_values):
     if len(ct)==0:
         return 0
     
-    aact = len(df[pd.DataFrame(df.Tags.tolist()).isin(ct).any(1).values])/len(ct)
+    aact = len(df[df['Tags'].apply(lambda x: any(item in x for item in ct))])/len(ct)
+    #aact = len(df[pd.DataFrame(df.Tags.tolist()).isin(ct).any(1).values])/len(ct)
     
     return aact    
 
@@ -44,7 +45,8 @@ def get_segment(x):
 
 def get_ram(u_acc, tags, q_date, w=[0.4, 0.3, 0.2, 0.1]):
     
-    u_acc_t = u_acc[pd.DataFrame(u_acc.Tags.tolist()).isin(tags).any(1).values].copy()
+    u_acc_t = u_acc[u_acc['Tags'].apply(lambda x: any(item in x for item in tags))].copy()
+    #u_acc_t = u_acc[pd.DataFrame(u_acc.Tags.tolist()).isin(tags).any(1).values].copy()
 
     u_acc_t["Segment"] = u_acc_t['CreationDate'].apply(lambda x: get_segment((q_date-x).days/30))
     freq = u_acc_t.groupby('Segment', as_index = False).count()[['Segment', 'Id']]
@@ -91,11 +93,11 @@ def evaluate_lin(data_dir, struc_dir, baseline_dir, n_samples, users, questions)
 
     run_dict = defaultdict(dict)
     for i, qid in enumerate(test_df.Id):
-        run_dict[qid] = dict(ranked[i])
+        run_dict[int(qid)] = dict(ranked[i])
             
     qrels_dict = defaultdict(dict)
     for qid, exp in zip(test_df.Id, test_df.AcceptedAnswerer):
-        qrels_dict[qid][str(int(exp))] = 1
+        qrels_dict[int(qid)][str(int(exp))] = 1
     
     qrels = Qrels(qrels_dict)
     run = Run(run_dict)
@@ -104,7 +106,7 @@ def evaluate_lin(data_dir, struc_dir, baseline_dir, n_samples, users, questions)
     table = [list(results.keys()), list(results.values())]
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
 
-    write_json(results, baseline_dir + 'measures')
+    write_json(run_dict, baseline_dir + 'run_dict')
 
 
 def TUEFLIN(data_name, label, n_samples):
@@ -131,7 +133,8 @@ def TUEFLIN(data_name, label, n_samples):
         tt_values = []    
         for u in tqdm(users.Expert.values): 
                 
-            exp_ans = questions[pd.DataFrame(questions.Answerers.tolist()).isin([u]).any(1).values]
+            #exp_ans = questions[pd.DataFrame(questions.Answerers.tolist()).isin([u]).any(1).values]
+            exp_ans = questions[questions['Answerers'].apply(lambda x: u in x)]
             exp_acc = questions[questions['AcceptedAnswerer'] == u]
             
             count_elem = Counter(itertools.chain.from_iterable(exp_ans.Tags))
@@ -139,7 +142,8 @@ def TUEFLIN(data_name, label, n_samples):
             u_tag = [x for x in count_elem if count_elem[x]>=np.percentile(values,75)]
             profile_tags.append(u_tag)
             
-            tt = len(exp_acc[pd.DataFrame(exp_acc.Tags.tolist()).isin(u_tag).any(1).values])/len(exp_acc)
+            #tt = len(exp_acc[pd.DataFrame(exp_acc.Tags.tolist()).isin(u_tag).any(1).values])/len(exp_acc)
+            tt = len(exp_acc[exp_acc['Tags'].apply(lambda x: any(item in x for item in u_tag))])/len(exp_acc)
             tt_values.append(tt)
         
         users['ProfileTags'] = profile_tags

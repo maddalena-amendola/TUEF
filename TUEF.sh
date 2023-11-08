@@ -5,8 +5,8 @@ DATASET="$1"
 
 $PY src/main.py --dataset $DATASET \
                 --label "EXP7" \
-                --startdate "2020-07-01" \
-                --enddate "2021-01-01" \
+                --startdate "2020-07-01" \ 
+                --enddate "2021-01-01" \ 
                 --mink 2 \
                 --maxk 10 \
                 --features 10 \

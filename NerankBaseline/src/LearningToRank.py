@@ -144,7 +144,7 @@ def print_result(data_test, ranker):
     }
     prediction_df = pd.DataFrame(prediction_df)
             
-    results = evaluate_pred(prediction_df, ground_truth, ["precision@1", "ndcg@3", "recall@10", "recall@100", 'mrr'])
+    results = evaluate_pred(prediction_df, ground_truth, ["precision@1", "hits@5", 'mrr'])
     
     table = [list(results.keys()), list(results.values())]
     print(tabulate(table, headers='firstrow', tablefmt='fancy_grid'))
@@ -157,7 +157,7 @@ def learning_to_rank(data_dir, struc_dir, ltr_samples, test_samples, threshold, 
                                 converters={'Tags': literal_eval, 'Answerers': literal_eval, 'Topic': literal_eval})
     test = pd.read_csv(data_dir + "test.csv.gz", compression='gzip', 
                                 converters={'Tags': literal_eval, 'Answerers': literal_eval, 'Topic': literal_eval})
-    exp_df = pd.read_csv(data_dir + 'experts.csv.gz', compression='gzip')    
+    exp_df = pd.read_csv(data_dir + 'users.csv.gz', compression='gzip')    
     
     print('\tPreparing data')
     ltr_df = train[train['AcceptedAnswerer'].isin(exp_df.Expert.values)]

@@ -229,7 +229,7 @@ def build_MLG(data_dir, struc_dir, min_k, max_k, n_features, min_accepted_answer
         questions, clusters = extract_topics(data_dir, struc_dir, n_features, min_k, max_k)
     
     #questions, clusters = extract_topics(data_dir, struc_dir, n_features, min_k, max_k)
-    users = pd.read_csv(data_dir + "experts.csv.gz", compression='gzip')
+    users = pd.read_csv(data_dir + "users.csv.gz", compression='gzip')
    
     layers = set(clusters.values())
     

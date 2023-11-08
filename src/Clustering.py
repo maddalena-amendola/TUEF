@@ -41,16 +41,8 @@ def remove_correlated_features(df):
 def get_experts(df, p):
     
     #build the dictionary where the keys are the Id of the users and the values are the frequencies of answers provided
-    '''answers_freq = dict(zip(df.Id, df.Answers))
-    accepted_freq = dict(zip(df.Id, df.AcceptedAnswers))'''
-    
-    answers_freq = dict(Counter(itertools.chain.from_iterable(df.Answerers.values)))
-    accepted_freq = dict(Counter(df.AcceptedAnswerer.values))
-    
-    values = sorted(list(accepted_freq.values()))
-    p = np.percentile(values, 96)
-    print('Number of AcceptedAnswers:', p)
-    #candidates = set([id_ for (id_, n) in zip(df.Id, df.AcceptedAnswers) if n>=p])
+    answers_freq = dict(zip(df.Id, df.Answers))
+    accepted_freq = dict(zip(df.Id, df.AcceptedAnswers))
     candidates = [k for k,v in accepted_freq.items() if v>=p]
     
     #build the dictionary where the keys are the Id of the users and the values are the ratio between
@@ -171,7 +163,7 @@ def update_users(data_dir, questions_df, answers_df):
     users_df['AcceptedAnswers'] = users_df.Id.apply(lambda x: accepted_freq.get(x, 0))
 
     #compute the experts
-    exps = get_experts(questions_df, 20)
+    exps = get_experts(users_df, 20)
     print('\tNumber of experts', len(exps))
 
     users_df['Expert'] = users_df.Id.apply(lambda x: 1 if x in exps else 0)
