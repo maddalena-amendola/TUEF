@@ -77,7 +77,8 @@ def compute_user_vector(questions, n_features, clusters, min_accepted_answers, l
     tag_id = {layer: dict(list(zip(layer_tags.get(layer), np.arange(len(layer_tags.get(layer)))))) for layer in layers}
     
     tags_to_consider = set(clusters.keys()) - to_remove
-    df = questions[pd.DataFrame(questions.Tags.tolist()).isin(tags_to_consider).any(1).values]
+    df = questions[questions['Tags'].apply(lambda x: any(item in x for item in tags_to_consider))]
+    #df = questions[pd.DataFrame(questions.Tags.tolist()).isin(tags_to_consider).any(1).values]
     df = df[~df['AcceptedAnswerer'].isna()]
     accepted_freq = dict(Counter(df.AcceptedAnswerer.values))
 
@@ -136,7 +137,8 @@ def compute_nodes_attributes(struc_dir, g, questions, topic, experts, names_id):
     
     print('\t\tComputing nodes attributes')
     
-    df = questions[pd.DataFrame(questions.Topic.tolist()).isin([topic]).any(1).values]
+    df = questions[questions['Topic'].apply(lambda x: any(item in x for item in [topic]))]
+    #df = questions[pd.DataFrame(questions.Topic.tolist()).isin([topic]).any(1).values]
 
     freq_accepted = dict(Counter(df.AcceptedAnswerer.values))
     answers_counter = dict(Counter(itertools.chain.from_iterable(df.Answerers.values)))
