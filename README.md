@@ -62,11 +62,11 @@ The `Baselines` can be computed after `TUEF` with the following command:
 $ bash Baselines.sh
 ```
 
-The `NerankBaseline` contains the adaptation of `TUEF` to the `Nerank` configuration problem. 
-To execute `NerankBaseline` from scratch, run the following command in the NerankBaseline folder:
+The `ExpertRankingBaseline` contains the adaptation of `TUEF` to the `Nerank` configuration problem. 
+To execute `ExpertRankingBaseline` from scratch, run the following command in the ExpertRankingBaseline folder:
 
 ```
-$ bash NerankBaseline.sh
+$ bash Baseline.sh
 ```
 
 The `T-Test.ipynb` notebook shows results of the paired t-test with `p-value<0.05`.
